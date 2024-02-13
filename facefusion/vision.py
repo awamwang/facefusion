@@ -1,6 +1,8 @@
+import os
 from typing import Optional, List, Tuple
 from functools import lru_cache
 import cv2
+import numpy as np
 
 from facefusion.typing import Frame, Resolution
 from facefusion.choices import video_template_sizes
@@ -121,11 +123,15 @@ def read_static_images(image_paths : List[str]) -> Optional[List[Frame]]:
 
 def read_image(image_path : str) -> Optional[Frame]:
 	if is_image(image_path):
-		return cv2.imread(image_path)
+		return cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
 	return None
 
 
 def write_image(image_path : str, frame : Frame) -> bool:
 	if image_path:
-		return cv2.imwrite(image_path, frame)
+		_, target_extension = os.path.splitext(os.path.basename(image_path))
+		_, buffer = cv2.imencode('.' + target_extension, frame, [int(cv2.IMWRITE_JPEG_QUALITY), 100]) # cv2.IMWRITE_PNG_COMPRESSION', frame)
+		with open(image_path, 'wb') as f:
+			f.write(buffer)	
+
 	return False
