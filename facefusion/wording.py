@@ -49,6 +49,7 @@ WORDING : Dict[str, Any] =\
 		'source': 'choose single or multiple source images or audios',
 		'target': 'choose single target image or video',
 		'output': 'specify the output file or directory',
+		'config': 'specify the config file',
 		# misc
 		'skip_download': 'omit automate downloads and remote lookups',
 		'headless': 'run the program without a user interface',
