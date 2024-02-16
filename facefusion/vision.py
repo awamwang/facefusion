@@ -4,21 +4,21 @@ from functools import lru_cache
 import cv2
 import numpy as np
 
-from facefusion.typing import Frame, Resolution
+from facefusion.typing import VisionFrame, Resolution
 from facefusion.choices import video_template_sizes
 from facefusion.filesystem import is_image, is_video
 
 
-def get_video_frame(video_path : str, frame_number : int = 0) -> Optional[Frame]:
+def get_video_frame(video_path : str, frame_number : int = 0) -> Optional[VisionFrame]:
 	if is_video(video_path):
 		video_capture = cv2.VideoCapture(video_path)
 		if video_capture.isOpened():
 			frame_total = video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
 			video_capture.set(cv2.CAP_PROP_POS_FRAMES, min(frame_total, frame_number - 1))
-			has_frame, frame = video_capture.read()
+			has_vision_frame, vision_frame = video_capture.read()
 			video_capture.release()
-			if has_frame:
-				return frame
+			if has_vision_frame:
+				return vision_frame
 	return None
 
 
@@ -93,27 +93,27 @@ def unpack_resolution(resolution : str) -> Resolution:
 	return width, height
 
 
-def resize_frame_resolution(frame : Frame, max_width : int, max_height : int) -> Frame:
-	height, width = frame.shape[:2]
+def resize_frame_resolution(vision_frame : VisionFrame, max_width : int, max_height : int) -> VisionFrame:
+	height, width = vision_frame.shape[:2]
 
 	if height > max_height or width > max_width:
 		scale = min(max_height / height, max_width / width)
 		new_width = int(width * scale)
 		new_height = int(height * scale)
-		return cv2.resize(frame, (new_width, new_height))
-	return frame
+		return cv2.resize(vision_frame, (new_width, new_height))
+	return vision_frame
 
 
-def normalize_frame_color(frame : Frame) -> Frame:
-	return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+def normalize_frame_color(vision_frame : VisionFrame) -> VisionFrame:
+	return cv2.cvtColor(vision_frame, cv2.COLOR_BGR2RGB)
 
 
 @lru_cache(maxsize = 128)
-def read_static_image(image_path : str) -> Optional[Frame]:
+def read_static_image(image_path : str) -> Optional[VisionFrame]:
 	return read_image(image_path)
 
 
-def read_static_images(image_paths : List[str]) -> Optional[List[Frame]]:
+def read_static_images(image_paths : List[str]) -> Optional[List[VisionFrame]]:
 	frames = []
 	if image_paths:
 		for image_path in image_paths:
@@ -121,13 +121,13 @@ def read_static_images(image_paths : List[str]) -> Optional[List[Frame]]:
 	return frames
 
 
-def read_image(image_path : str) -> Optional[Frame]:
+def read_image(image_path : str) -> Optional[VisionFrame]:
 	if is_image(image_path):
 		return cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), -1)
 	return None
 
 
-def write_image(image_path : str, frame : Frame) -> bool:
+def write_image(image_path : str, frame : VisionFrame) -> bool:
 	if image_path:
 		_, target_extension = os.path.splitext(os.path.basename(image_path))
 		_, buffer = cv2.imencode('.' + target_extension, frame, [int(cv2.IMWRITE_JPEG_QUALITY), 100]) # cv2.IMWRITE_PNG_COMPRESSION', frame)

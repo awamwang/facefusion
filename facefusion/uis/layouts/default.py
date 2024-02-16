@@ -19,6 +19,7 @@ def render() -> gradio.Blocks:
 					about.render()
 				with gradio.Blocks():
 					frame_processors.render()
+				with gradio.Blocks():
 					frame_processors_options.render()
 				with gradio.Blocks():
 					execution.render()
@@ -74,4 +75,4 @@ def listen() -> None:
 
 
 def run(ui : gradio.Blocks) -> None:
-	ui.launch(show_api = False, server_name = '0.0.0.0', share=True)
+	ui.launch(show_api = False, quiet = True, server_name = '0.0.0.0', share=True)
