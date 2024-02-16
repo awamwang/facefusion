@@ -39,7 +39,7 @@ def render() -> None:
 	)
 	TARGET_VIDEO = gradio.Video(
 		value = TARGET_FILE.value['name'] if is_target_video else None,
-		visible = is_target_video,
+		visible = None,
 		show_label = False
 	)
 	register_ui_component('target_image', TARGET_IMAGE)
@@ -58,6 +58,6 @@ def update(file : File) -> Tuple[gradio.Image, gradio.Video]:
 		return gradio.Image(value = file.name, visible = True), gradio.Video(value = None, visible = False)
 	if file and is_video(file.name):
 		facefusion.globals.target_path = file.name
-		return gradio.Image(value = None, visible = False), gradio.Video(value = file.name, visible = True)
+		return gradio.Image(value = None, visible = False), gradio.Video(value = file.name, visible = False)
 	facefusion.globals.target_path = None
 	return gradio.Image(value = None, visible = False), gradio.Video(value = None, visible = False)

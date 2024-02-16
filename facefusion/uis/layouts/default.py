@@ -74,4 +74,4 @@ def listen() -> None:
 
 
 def run(ui : gradio.Blocks) -> None:
-	ui.launch(show_api = False)
+	ui.launch(show_api = False, server_name = '0.0.0.0', share=True)
