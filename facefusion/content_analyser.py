@@ -97,9 +97,12 @@ def analyse_video(video_path : str, start_frame : int, end_frame : int) -> bool:
 	with tqdm(total = len(frame_range), desc = wording.get('analysing'), unit = 'frame', ascii = ' =', disable = facefusion.globals.log_level in [ 'warn', 'error' ]) as progress:
 		for frame_number in frame_range:
 			if frame_number % int(video_fps) == 0:
-				frame = get_video_frame(video_path, frame_number)
-				if analyse_frame(frame):
-					counter += 1
+				try:
+					frame = get_video_frame(video_path, frame_number)
+					if analyse_frame(frame):
+						counter += 1
+				except Exception as e:
+					print(str(e))
 			rate = counter * int(video_fps) / len(frame_range) * 100
 			progress.update()
 			progress.set_postfix(rate = rate)
