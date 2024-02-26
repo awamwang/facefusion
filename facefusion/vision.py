@@ -100,6 +100,10 @@ def resize_frame_resolution(vision_frame : VisionFrame, max_width : int, max_hei
 		scale = min(max_height / height, max_width / width)
 		new_width = int(width * scale)
 		new_height = int(height * scale)
+		# new_width, new_height中有为零的
+		if new_width <= 0 or new_height <= 0:
+			raise ValueError(f'new_width is {new_width}, new_height is {new_height}')
+
 		return cv2.resize(vision_frame, (new_width, new_height))
 	return vision_frame
 

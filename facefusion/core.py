@@ -11,6 +11,7 @@ import numpy
 import onnxruntime
 from time import sleep
 from argparse import ArgumentParser, HelpFormatter
+from dotenv import load_dotenv
 
 import facefusion.choices
 import facefusion.globals
@@ -26,6 +27,8 @@ from facefusion.memory import limit_system_memory
 from facefusion.filesystem import list_directory, get_temp_frame_paths, create_temp, move_temp, clear_temp, is_image, is_video, filter_audio_paths
 from facefusion.ffmpeg import extract_frames, compress_image, merge_video, restore_audio, replace_audio
 from facefusion.vision import get_video_frame, read_image, read_static_images, pack_resolution, detect_video_resolution, detect_video_fps, create_video_resolutions
+
+load_dotenv()
 
 onnxruntime.set_default_logger_severity(3)
 warnings.filterwarnings('ignore', category = UserWarning, module = 'gradio')

@@ -1,4 +1,5 @@
 import gradio
+import os
 
 from facefusion.uis.components import about, frame_processors, frame_processors_options, execution, execution_thread_count, execution_queue_count, memory, temp_frame, output_options, common_options, source, target, output, preview, trim_frame, face_analyser, face_selector, face_masker
 
@@ -75,5 +76,12 @@ def listen() -> None:
 
 
 def run(ui : gradio.Blocks) -> None:
-	# ui.launch(show_api = False, quiet = True, server_name = '0.0.0.0', share=True)
-	ui.launch(show_api = False, quiet = True)
+    address = os.getenv('GRADIO_SERVER_ADDRESS', '127.0.0.1')
+    port = int(os.getenv('GRADIO_SERVER_PORT', 7860))
+    if os.name == 'nt' and address == '0.0.0.0':
+        address = '127.0.0.1'
+
+    print(f'Listening on http://{address}:{port}')
+    ui.launch(show_api = False, server_name = address, server_port = port)
+    # ui.launch(show_api = False, server_name = address, server_port = port, quiet=True, share=True)
+    # ui.launch(show_api=False, quiet=True)
