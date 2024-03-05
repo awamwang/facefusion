@@ -41,10 +41,12 @@ def load_frame_processor_module(frame_processor : str) -> Any:
 				raise NotImplementedError
 	except ModuleNotFoundError as exception:
 		logger.error(wording.get('frame_processor_not_loaded').format(frame_processor = frame_processor), __name__.upper())
-		logger.debug(exception.msg, __name__.upper())
+		# logger.debug(exception.msg, __name__.upper())
+		raise exception
 		sys.exit(1)
 	except NotImplementedError:
 		logger.error(wording.get('frame_processor_not_implemented').format(frame_processor = frame_processor), __name__.upper())
+		raise exception
 		sys.exit(1)
 	return frame_processor_module
 

@@ -36,9 +36,16 @@ warnings.filterwarnings('ignore', category = UserWarning, module = 'torchvision'
 
 def parse_config_path() -> str:
 	# should run before config
-	program = ArgumentParser(formatter_class = lambda prog: HelpFormatter(prog, max_help_position = 130), add_help = False)
+	program = ArgumentParser(formatter_class = lambda prog: HelpFormatter(prog, max_help_position = 130), add_help = False, allow_abbrev=True)
 	program.add_argument('-c', '--config', help = wording.get('help.config'), dest = 'config_path', default = 'facefusion.ini')
-	return program.parse_args().config_path
+	group_misc = program.add_argument_group('misc')
+	group_misc.add_argument('--log-level', help = wording.get('help.log_level'), default = 'info', choices = logger.get_log_levels())
+
+	args, extra_args = program.parse_known_args()
+	facefusion.globals.log_level = args.log_level
+	logger.init(facefusion.globals.log_level)
+	
+	return args.config_path
 
 def cli() -> None:
 	signal.signal(signal.SIGINT, lambda signal_number, frame: destroy())
@@ -303,6 +310,7 @@ def process_video(start_time : float) -> None:
 		return
 	# merge video
 	logger.info(wording.get('merging_video_fps').format(video_fps = facefusion.globals.output_video_fps), __name__.upper())
+	print(facefusion.globals.target_path, facefusion.globals.output_video_resolution, facefusion.globals.output_video_fps)
 	if not merge_video(facefusion.globals.target_path, facefusion.globals.output_video_resolution, facefusion.globals.output_video_fps):
 		logger.error(wording.get('merging_video_failed'), __name__.upper())
 		return
