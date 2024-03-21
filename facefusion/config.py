@@ -14,7 +14,7 @@ def get_config() -> ConfigParser:
 		# config_path = resolve_relative_path('../facefusion.ini')
 		config_path = facefusion.globals.config_path
 		CONFIG = ConfigParser()
-		CONFIG.read(config_path, encoding='utf-8')
+		CONFIG.read(config_path, encoding = 'utf-8')
 	return CONFIG
 
 
