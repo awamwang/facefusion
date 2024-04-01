@@ -61,7 +61,17 @@ MODELS : ModelSet =\
 		'path': resolve_relative_path('../.assets/models/span_kendata_x4.onnx'),
 		'size': (128, 8, 2),
 		'scale': 4
-	}
+	},
+    'DiffBIR_full_v1': {
+        'url': 'https://huggingface.co/lxq007/DiffBIR/resolve/main/general_full_v1.ckpt?download=true',
+        'path': resolve_relative_path('../.assets/models/DiffBIR_general_full_v1.ckpt'),
+        'scale': 2
+     },
+	 'DiffBIR_swinir_v1': {
+		'url': 'https://huggingface.co/lxq007/DiffBIR/resolve/main/swinir_v1.ckpt?download=true',
+		'path': resolve_relative_path('../.assets/models/DiffBIR_swinir_v1.ckpt'),
+		'scale': 2
+	 },
 }
 OPTIONS : Optional[OptionsWithModel] = None
 

@@ -199,6 +199,7 @@ def pre_process(mode : ProcessMode) -> bool:
 		logger.error(wording.get('select_image_source') + wording.get('exclamation_mark'), NAME)
 		return False
 	source_image_paths = filter_image_paths(facefusion.globals.source_paths)
+	logger.debug('source_image_paths' + str(source_image_paths), NAME)
 	source_frames = read_static_images(source_image_paths)
 	for source_frame in source_frames:
 		if not get_one_face(source_frame):
